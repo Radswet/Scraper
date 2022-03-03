@@ -32,7 +32,6 @@ for url in Categories_urls:
     for p in Product:
         Products_urls.append(p.find('a')['href'])
     print(Products_urls)
-Products_urls = ["https://www.clandent.cl/producto/adhesivo-para-cubeta-kerr/?v=cda73baae416"]
 
 for url in Products_urls:
     try:
