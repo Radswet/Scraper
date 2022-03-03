@@ -1,14 +1,13 @@
 from bs4 import BeautifulSoup
 import requests
 import pymongo
-from pymongo import MongoClient
 
 client = pymongo.MongoClient(
     "mongodb+srv://Radswet:AmJjNHkPLn35clNP@cluster0.efbll.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 mydb = client["Cluster0"]
 mycol = mydb["Weplay"]
 
-page = 1
+page = 47
 
 product_urls = []
 
@@ -45,7 +44,10 @@ for url in product_urls:
         sku = soup.find('div', {'itemprop': 'sku'}).text
         name = soup.find('span', {'itemprop': 'name'}).text.strip()
         price = soup.find('span', {'class': 'price'}).text
+        
+        
 
+        print(price)
         table = soup.find(
             'table', {'style': 'border-collapse: collapse; width: 100%; height: auto;'})
         table_body = table.find('tbody')
@@ -66,6 +68,7 @@ for url in product_urls:
                 if i[0] == 'Plaza Norte':
                     PlazaNorte = True
         if PlazaNorte or PremiumOutlet:
+
             data = {"name": name, "price": price,
                     "sku": sku, "url": url, "Premium Outlet": PremiumOutlet, "Plaza Norte": PlazaNorte}
             mycol.insert_one(data)
