@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 import pymongo
-from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 load_dotenv()
