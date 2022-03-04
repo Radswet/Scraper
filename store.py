@@ -1,8 +1,12 @@
 from Stores.Weplay import discover, products
 import pymongo
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-client = pymongo.MongoClient(
-    "mongodb+srv://Radswet:AmJjNHkPLn35clNP@cluster0.efbll.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+CONNECTION_STRING = os.getenv('CONNECTION_STRING')
+
+client = pymongo.MongoClient(CONNECTION_STRING)
 mydb = client["Cluster0"]
 mycol = mydb["Weplay"]
 
