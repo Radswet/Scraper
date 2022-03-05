@@ -1,6 +1,5 @@
 from math import prod
 from bs4 import BeautifulSoup
-import requests
 import pymongo
 import os
 from dotenv import load_dotenv
