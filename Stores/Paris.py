@@ -5,17 +5,14 @@ import requests
 import pymongo
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
-
-
 
 CONNECTION_STRING = os.getenv('CONNECTION_STRING')
 
 client = pymongo.MongoClient(CONNECTION_STRING)
 
-mydb = client["Cluster0"]
-mycol = mydb["Paris"]
-
+mydb = client["Paris"]
 
 product_urls = []
 
@@ -26,6 +23,7 @@ subcategoria="celulares"
 tipo="smartphones"
 start = 0 # 40 en 40
 sz = 40
+mycol = mydb[categoria]
 while True:
     url = website.format(categoria,subcategoria,tipo,start,size)      
     result = requests.get(url)
@@ -47,12 +45,16 @@ for urls in product_urls:
     url = website.format(urls)    
     result = requests.get(url)
     soup = BeautifulSoup(result.text, 'html.parser')
-    print(url)
-    name = soup.find('h1',{"itemprop":"name"}).text
-    price = soup.find('div',class_="price__text").text
+    
+    name = soup.find('h1',{"itemprop":"name"}).text.strip()
+    price = soup.find('div',class_="price__text").text.strip()
+    brand = soup.find('a',{"id":"GTM_pdp_brand"}).text
+    sku = soup.find('div',class_="col-xs-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 pdp-sku").find('p').text.replace("SKU ","")    
+
     try:
-        price_sm = soup.find('div',class_="price__text-sm").text
-        data = {"name":name.strip(),"price":price.strip(),"price-sm":price_sm.strip()}
+        price_sm = soup.find('div',class_="price__text-sm").text.strip()
+        data = {"name":name,"price":price,"price-sm":price_sm,"brand":brand,"sku":sku,"url":url}
     except:
-        data = {"name":name.strip(),"price":price.strip()}
+        data = {"name":name,"price":price,"brand":brand,"sku":sku,"url":url}
+    print(data)
     mycol.insert_one(data)

@@ -3,3 +3,6 @@
 
 #enviroment variables
 .env
+
+#driver
+/Stores/chromedriver_linux64
